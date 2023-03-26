@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.UUID;
 
 @RestControllerAdvice
 public class ExceptionHandle {
@@ -25,7 +26,7 @@ public class ExceptionHandle {
     private ErrorContainer composeErrorContainer(Exception e, int errorCode) {
 
         return ErrorContainer.builder()
-                //.exceptionId(generateUUID())
+                .exceptionId(UUID.randomUUID().toString())
                 .timestamp(LocalDateTime.now())
                 .errorCode(errorCode)
                 .clazz(e.getClass().getSimpleName())

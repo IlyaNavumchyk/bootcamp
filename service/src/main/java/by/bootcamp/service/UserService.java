@@ -9,7 +9,5 @@ public interface UserService {
 
     Page<User> findAll(Pageable page);
 
-    User findById(Long id);
-
     User create(User user, UserRoles roleName);
 }

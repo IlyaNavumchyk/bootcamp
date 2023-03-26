@@ -15,17 +15,14 @@ import javax.validation.constraints.Size;
 public class RequestForCreateUser {
 
     //@Schema(description = "User surname", required = true, defaultValue = "surname", type = "string")
-    //@Size(max = 50, message = "User surname length must be less than or equal to 40")
     @Pattern(regexp = "^[A-Za-z]{1,40}$", message = "Surname must be between 1 and 40 Latin characters.")
     private String surname;
 
     //@Schema(description = "User patronymic", required = true, defaultValue = "", type = "string")
-    //@Size(max = 20, message = "User name length must be less than or equal to 20")
     @Pattern(regexp = "^[A-Za-z]{1,20}$", message = "Name must be between 1 and 20 Latin characters.")
     private String name;
 
     //@Schema(description = "User patronymic", required = true, defaultValue = "patronymic", type = "string")
-    //@Size(max = 40, message = "User patronymic length must be less than or equal to 40")
     @Pattern(regexp = "^[A-Za-z]{1,40}$", message = "Patronymic must be between 1 and 40 Latin characters.")
     private String patronymic;
 

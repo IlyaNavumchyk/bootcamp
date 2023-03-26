@@ -4,7 +4,6 @@ import by.bootcamp.domain.Role;
 import by.bootcamp.domain.User;
 import by.bootcamp.domain.UserRoles;
 import by.bootcamp.exception.EntityAlreadyExistException;
-import by.bootcamp.exception.NoSuchEntityException;
 import by.bootcamp.repository.RoleRepository;
 import by.bootcamp.repository.UserRepository;
 import by.bootcamp.service.UserService;
@@ -27,12 +26,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<User> findAll(Pageable page) {
         return userRepository.findAll(page);
-    }
-
-    @Override
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new NoSuchEntityException(String.format("User with this id \"%s\" not found", id)));
     }
 
     @Transactional

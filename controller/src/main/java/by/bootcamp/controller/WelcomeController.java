@@ -1,5 +1,6 @@
 package by.bootcamp.controller;
 
+import by.bootcamp.controller.responce.UserResponse;
 import by.bootcamp.converter.UserMapper;
 import by.bootcamp.domain.User;
 import by.bootcamp.service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
+import java.util.Map;
 
 import static by.bootcamp.controller.DefaultResponseTag.USERS;
 
@@ -33,13 +35,14 @@ public class WelcomeController {
     private final UserMapper userMapper;
 
     @GetMapping()
-    public ResponseEntity<Object> findAll() {
+    public ResponseEntity<Map<String, Page<UserResponse>>> findAll() {
 
         return findAll(null);
     }
 
     @GetMapping("/{page_number}")
-    public ResponseEntity<Object> findAll(@PathVariable(value = "page_number", required = false) String pageNumber) {
+    public ResponseEntity<Map<String, Page<UserResponse>>> findAll(
+            @PathVariable(value = "page_number", required = false) String pageNumber) {
 
         Pageable pageable = getPageable(pageNumber);
 

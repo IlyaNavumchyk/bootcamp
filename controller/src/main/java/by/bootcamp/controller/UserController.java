@@ -1,6 +1,7 @@
 package by.bootcamp.controller;
 
 import by.bootcamp.controller.request.RequestForCreateUser;
+import by.bootcamp.controller.responce.UserResponse;
 import by.bootcamp.converter.UserMapper;
 import by.bootcamp.domain.User;
 import by.bootcamp.domain.UserRoles;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.Map;
 
 import static by.bootcamp.controller.DefaultResponseTag.USER;
 
@@ -27,7 +29,7 @@ public class UserController {
     private final UserMapper userMapper;
 
     @PostMapping
-    public ResponseEntity<Object> createUser(@RequestBody @Valid RequestForCreateUser request) {
+    public ResponseEntity<Map<String, UserResponse>> createUser(@RequestBody @Valid RequestForCreateUser request) {
 
         User user = userMapper.mapToCreate(request);
 
