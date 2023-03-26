@@ -1,6 +1,7 @@
 package by.bootcamp.exceptionhandle;
 
 import by.bootcamp.exception.EntityAlreadyExistException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
+@Log4j2
 @RestControllerAdvice
 public class ExceptionHandle {
 
@@ -41,6 +43,8 @@ public class ExceptionHandle {
         }
         errorContainer.setMessage(sb.substring(0, sb.length() - 1));
 
+        loggingException(e);
+
         return new ResponseEntity<>(
                 Collections.singletonMap(ERROR, errorContainer),
                 HttpStatus.BAD_REQUEST
@@ -65,5 +69,10 @@ public class ExceptionHandle {
                 .clazz(e.getClass().getSimpleName())
                 .message(e.getMessage())
                 .build();
+    }
+
+    private void loggingException(Exception e) {
+
+        log.error("{} with massage {}!", e.getClass().getSimpleName(), e.getMessage());
     }
 }
