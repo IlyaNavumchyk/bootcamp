@@ -3,7 +3,14 @@ package by.bootcamp.controller;
 import by.bootcamp.controller.responce.UserResponse;
 import by.bootcamp.converter.UserMapper;
 import by.bootcamp.domain.User;
+import by.bootcamp.exceptionhandle.ErrorContainer;
 import by.bootcamp.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,15 +41,41 @@ public class WelcomeController {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    @Operation(summary = "Get start page of users.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Get page of users.",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = UserResponse.class)))}),
+                    @ApiResponse(responseCode = "400", description = "Bad request",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))}),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))})}
+    )
     @GetMapping()
     public ResponseEntity<Map<String, Page<UserResponse>>> findAll() {
 
         return findAll(null);
     }
 
+    @Operation(summary = "Get page of users by page number.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Get page of users.",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = UserResponse.class)))}),
+                    @ApiResponse(responseCode = "400", description = "Bad request",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))}),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))})}
+    )
     @GetMapping("/{page_number}")
     public ResponseEntity<Map<String, Page<UserResponse>>> findAll(
-            @PathVariable(value = "page_number", required = false) String pageNumber) {
+            @PathVariable(value = "page_number")
+            @Parameter(description = "Users page number.", example = "1")
+            String pageNumber) {
 
         Pageable pageable = getPageable(pageNumber);
 

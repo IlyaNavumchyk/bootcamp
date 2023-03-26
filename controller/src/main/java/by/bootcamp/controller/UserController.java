@@ -5,7 +5,13 @@ import by.bootcamp.controller.responce.UserResponse;
 import by.bootcamp.converter.UserMapper;
 import by.bootcamp.domain.User;
 import by.bootcamp.domain.UserRoles;
+import by.bootcamp.exceptionhandle.ErrorContainer;
 import by.bootcamp.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +34,21 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    @Operation(summary = "Add new user.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "User added successful.",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = UserResponse.class)))}),
+                    @ApiResponse(responseCode = "400", description = "Bad request",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))}),
+                    @ApiResponse(responseCode = "500", description = "Server error",
+                            content = {@Content(mediaType = "application/json",
+                                    array = @ArraySchema(schema = @Schema(implementation = ErrorContainer.class)))})}
+    )
     @PostMapping
-    public ResponseEntity<Map<String, UserResponse>> createUser(@RequestBody @Valid RequestForCreateUser request) {
+    public ResponseEntity<Map<String, UserResponse>> createUser(
+            @RequestBody @Valid RequestForCreateUser request) {
 
         User user = userMapper.mapToCreate(request);
 
