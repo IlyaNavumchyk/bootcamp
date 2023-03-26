@@ -1,15 +1,15 @@
 package by.bootcamp.service;
 
 import by.bootcamp.domain.User;
-import by.bootcamp.service.request.RequestForCreateUser;
-
-import java.util.List;
+import by.bootcamp.domain.UserRoles;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-    List<User> findAll();
+    Page<User> findAll(Pageable page);
 
     User findById(Long id);
 
-    void create(RequestForCreateUser user);
+    User create(User user, UserRoles roleName);
 }

@@ -8,13 +8,12 @@ import by.bootcamp.exception.NoSuchEntityException;
 import by.bootcamp.repository.RoleRepository;
 import by.bootcamp.repository.UserRepository;
 import by.bootcamp.service.UserService;
-import by.bootcamp.service.request.RequestForCreateUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -26,8 +25,8 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public Page<User> findAll(Pageable page) {
+        return userRepository.findAll(page);
     }
 
     @Override
@@ -38,55 +37,25 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void create(RequestForCreateUser request) {
-        if (checkUserEmailForNotExistInDB(request)) {
+    public User create(User user, UserRoles roleName) {
 
-            User user = mapRequestToUser(request);
-
-            for (Role role : user.getRoles()) {
-
-                role.getUsers().add(user);
-            }
-
-            userRepository.save(user);
+        if (!checkUserEmailForNotExistInDB(user)) {
+            throw new EntityAlreadyExistException(
+                    String.format("User with this email \"%s\" already exists", user.getEmail()));
         }
+
+        Role role = roleRepository.findByRoleName(roleName);
+        user.setRoles(Set.of(role));
+        role.getUsers().add(user);
+
+        return userRepository.save(user);
     }
 
-    private boolean checkUserEmailForNotExistInDB(final RequestForCreateUser user) {
+    private boolean checkUserEmailForNotExistInDB(final User user) {
 
         String userEmail = user.getEmail();
         Optional<User> userByEmail = userRepository.findByEmail(userEmail);
 
-        if (userByEmail.isPresent()) {
-
-            throw new EntityAlreadyExistException(
-                    String.format("User with this email \"%s\" already exists", userEmail));
-        }
-
-        return true;
-    }
-
-    private User mapRequestToUser(final RequestForCreateUser request) {
-
-        User user = new User();
-        user.setSurname(request.getName());
-        user.setName(request.getName());
-        user.setPatronymic(request.getPatronymic());
-        user.setEmail(request.getEmail());
-        user.setRoles(getRolesFromRequest(request));
-
-        return user;
-    }
-
-    private Set<Role> getRolesFromRequest(final RequestForCreateUser request) {
-
-        final Set<Role> userRoles = new HashSet<>();
-
-        for (UserRoles role : request.getRoles()) {
-
-            userRoles.add(roleRepository.findByRoleName(role));
-        }
-
-        return userRoles;
+        return userByEmail.isEmpty();
     }
 }

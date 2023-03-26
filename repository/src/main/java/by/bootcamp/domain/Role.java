@@ -3,6 +3,7 @@ package by.bootcamp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,10 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -36,27 +34,9 @@ public class Role {
     @Enumerated(value = EnumType.STRING)
     private UserRoles roleName;
 
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;
-
-    @Column(name = "modification_date")
-    private LocalDateTime modificationDate;
-
     @ManyToMany
     @JoinTable(name = "l_user_role",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> users;
-
-    @PrePersist
-    public void prePersist() {
-
-        creationDate = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-
-        modificationDate = LocalDateTime.now();
-    }
 }
