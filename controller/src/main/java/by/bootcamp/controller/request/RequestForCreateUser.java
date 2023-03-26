@@ -2,7 +2,6 @@ package by.bootcamp.controller.request;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +10,6 @@ import javax.validation.constraints.Size;
 
 @Setter
 @Getter
-@ToString
 public class RequestForCreateUser {
 
     //@Schema(description = "User surname", required = true, defaultValue = "surname", type = "string")
