@@ -1,8 +1,10 @@
 package by.bootcamp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.Column;
@@ -29,12 +31,11 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "user_name")
-    private String name;
-
     @Column(name = "surname")
     private String surname;
 
+    @Column(name = "user_name")
+    private String name;
 
     @Column(name = "patronymic")
     private String patronymic;
